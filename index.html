@@ -3,88 +3,157 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>LIVE20</title>
+<title>LIVE20 Games</title>
 
 <style>
 *{box-sizing:border-box}
+
 body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#07130f;
-  color:white;
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#07130f;
+ color:white;
 }
+
 header{
-  padding:20px;
-  text-align:center;
-  background:#0d241b;
-  border-bottom:1px solid #28533f;
+ padding:18px;
+ text-align:center;
+ background:#0d241b;
+ border-bottom:1px solid #28533f;
 }
+
 .logo{
-  color:#ffb300;
-  font-size:32px;
-  font-weight:bold;
+ color:#ffb300;
+ font-size:32px;
+ font-weight:bold;
 }
+
 .container{
-  width:92%;
-  max-width:500px;
-  margin:20px auto;
+ width:92%;
+ max-width:500px;
+ margin:20px auto;
 }
+
 .card{
-  background:#0d241b;
-  border:1px solid #28533f;
-  border-radius:16px;
-  padding:20px;
-  margin-bottom:16px;
+ background:#0d241b;
+ border:1px solid #28533f;
+ border-radius:16px;
+ padding:18px;
+ margin-bottom:15px;
 }
+
 input{
-  width:100%;
-  padding:13px;
-  margin:7px 0;
-  border:1px solid #355d4c;
-  border-radius:9px;
-  background:#07130f;
-  color:white;
+ width:100%;
+ padding:13px;
+ margin:7px 0;
+ border-radius:9px;
+ border:1px solid #355d4c;
+ background:#07130f;
+ color:white;
 }
+
 button{
-  width:100%;
-  padding:14px;
-  margin-top:9px;
-  border:0;
-  border-radius:10px;
-  background:#ffb300;
-  color:#111;
-  font-size:16px;
-  font-weight:bold;
+ width:100%;
+ padding:14px;
+ margin-top:9px;
+ border:0;
+ border-radius:10px;
+ background:#ffb300;
+ color:#111;
+ font-size:16px;
+ font-weight:bold;
 }
+
 .secondary{
-  background:#19382b;
-  color:white;
+ background:#19382b;
+ color:white;
 }
-.hidden{display:none}
+
+.hidden{
+ display:none;
+}
+
 .game{
-  display:flex;
-  align-items:center;
-  gap:15px;
-  cursor:pointer;
+ display:flex;
+ align-items:center;
+ gap:15px;
+ cursor:pointer;
 }
-.icon{font-size:40px}
-.game h3{margin:0 0 5px}
+
+.icon{
+ font-size:40px;
+}
+
+.game h3{
+ margin:0 0 5px;
+}
+
 .game p{
-  margin:0;
-  color:#9fb0a8;
-  font-size:13px;
+ margin:0;
+ color:#9fb0a8;
+ font-size:13px;
 }
+
 .points{
-  color:#ffb300;
-  font-size:30px;
-  font-weight:bold;
-  text-align:center;
+ text-align:center;
+ color:#ffb300;
+ font-size:30px;
+ font-weight:bold;
 }
-#message{
-  min-height:22px;
-  color:#ffcc66;
-  text-align:center;
-  margin:8px;
+
+.gameScreen{
+ display:none;
+}
+
+.gameScreen.active{
+ display:block;
+}
+
+.gameArea{
+ height:330px;
+ background:#07130f;
+ border:2px solid #28533f;
+ border-radius:15px;
+ position:relative;
+ overflow:hidden;
+ margin:15px 0;
+}
+
+.target{
+ position:absolute;
+ width:70px;
+ height:70px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:52px;
+ cursor:pointer;
+}
+
+.big{
+ font-size:80px;
+ text-align:center;
+ padding:50px 0;
+}
+
+.result{
+ min-height:30px;
+ text-align:center;
+ color:#ffcc66;
+ font-weight:bold;
+ margin:10px;
+}
+
+canvas{
+ width:100%;
+ max-width:420px;
+ height:350px;
+ background:#07130f;
+ border:2px solid #28533f;
+ border-radius:15px;
+ display:block;
+ margin:auto;
+ touch-action:none;
 }
 </style>
 </head>
@@ -92,94 +161,311 @@ button{
 <body>
 
 <header>
-  <div class="logo">LIVE20</div>
-  <div>🎮 Free Arcade Games</div>
+ <div class="logo">LIVE20</div>
+ <div>🎮 Free Arcade Games</div>
 </header>
 
 <div class="container">
 
-<!-- LOGIN -->
+
+<!-- LOGIN / REGISTER -->
+
 <div id="authBox" class="card">
-  <h2 id="authTitle">Login</h2>
 
-  <input id="email"
-         type="email"
-         placeholder="Email">
+ <h2>🔐 Login / Register</h2>
 
-  <input id="password"
-         type="password"
-         placeholder="Password">
+ <input
+   id="email"
+   type="email"
+   placeholder="Email">
 
-  <button onclick="login()">LOGIN</button>
-  <button class="secondary"
-          onclick="register()">REGISTER</button>
+ <input
+   id="password"
+   type="password"
+   placeholder="Password">
 
-  <div id="message"></div>
+ <button onclick="registerUser()">
+   REGISTER
+ </button>
+
+ <button
+   class="secondary"
+   onclick="loginUser()">
+   LOGIN
+ </button>
+
+ <div id="authMessage"
+      class="result"></div>
+
 </div>
 
 
 <!-- HOME -->
+
 <div id="home" class="hidden">
 
-  <div class="card">
-    <div>👤 <span id="userEmail"></span></div>
-    <div class="points">🪙 1,000</div>
-    <button class="secondary"
-            onclick="logout()">LOGOUT</button>
+ <div class="card">
+
+  <div>
+   👤 <span id="userEmail"></span>
   </div>
 
-
-  <h2>🎮 Choose a Game</h2>
-
-
-  <div class="card game"
-       onclick="alert('🏏 Cricket Hit চালু হবে')">
-    <div class="icon">🏏</div>
-    <div>
-      <h3>Cricket Hit</h3>
-      <p>Tap and score runs.</p>
-    </div>
+  <div class="points">
+   🪙 <span id="mainPoints">1000</span>
   </div>
 
+  <button
+    class="secondary"
+    onclick="logoutUser()">
+    LOGOUT
+  </button>
 
-  <div class="card game"
-       onclick="alert('🎯 Target Hit চালু হবে')">
-    <div class="icon">🎯</div>
-    <div>
-      <h3>Target Hit</h3>
-      <p>Hit the moving target.</p>
-    </div>
+ </div>
+
+
+ <h2>🎮 Tap to Play</h2>
+
+
+ <!-- GAME 1 -->
+
+ <div
+   class="card game"
+   onclick="openGame('cricketGame')">
+
+  <div class="icon">🏏</div>
+
+  <div>
+   <h3>Cricket Hit</h3>
+   <p>Tap HIT and score runs.</p>
   </div>
 
+ </div>
 
-  <div class="card game"
-       onclick="alert('🪙 Coin Catch চালু হবে')">
-    <div class="icon">🪙</div>
-    <div>
-      <h3>Coin Catch</h3>
-      <p>Catch the falling coins.</p>
-    </div>
+
+ <!-- GAME 2 -->
+
+ <div
+   class="card game"
+   onclick="openGame('targetGame')">
+
+  <div class="icon">🎯</div>
+
+  <div>
+   <h3>Target Hit</h3>
+   <p>Hit the target and get +100.</p>
   </div>
 
+ </div>
 
-  <div class="card game"
-       onclick="alert('🚗 Road Runner চালু হবে')">
-    <div class="icon">🚗</div>
-    <div>
-      <h3>Road Runner</h3>
-      <p>Avoid obstacles.</p>
-    </div>
+
+ <!-- GAME 3 -->
+
+ <div
+   class="card game"
+   onclick="openGame('coinGame')">
+
+  <div class="icon">🪙</div>
+
+  <div>
+   <h3>Coin Catch</h3>
+   <p>Catch the coin for bonus points.</p>
   </div>
 
+ </div>
 
-  <div class="card game"
-       onclick="alert('🧱 Brick Breaker চালু হবে')">
-    <div class="icon">🧱</div>
-    <div>
-      <h3>Brick Breaker</h3>
-      <p>Break the blocks.</p>
-    </div>
+
+ <!-- GAME 4 -->
+
+ <div
+   class="card game"
+   onclick="openGame('roadGame')">
+
+  <div class="icon">🚗</div>
+
+  <div>
+   <h3>Road Runner</h3>
+   <p>Move and avoid obstacles.</p>
   </div>
+
+ </div>
+
+
+ <!-- GAME 5 -->
+
+ <div
+   class="card game"
+   onclick="openGame('brickGame')">
+
+  <div class="icon">🧱</div>
+
+  <div>
+   <h3>Brick Breaker</h3>
+   <p>Break the blocks.</p>
+  </div>
+
+ </div>
+
+</div>
+
+
+<!-- CRICKET -->
+
+<div id="cricketGame"
+     class="gameScreen card">
+
+ <h2>🏏 Cricket Hit</h2>
+
+ <div class="points">
+  Score: <span id="cricketScore">0</span>
+ </div>
+
+ <div class="big"
+      id="cricketBall">
+   🏏
+ </div>
+
+ <button onclick="hitBall()">
+   🏏 HIT
+ </button>
+
+ <button
+   class="secondary"
+   onclick="backHome()">
+   ← BACK
+ </button>
+
+</div>
+
+
+<!-- TARGET -->
+
+<div id="targetGame"
+     class="gameScreen card">
+
+ <h2>🎯 Target Hit</h2>
+
+ <div class="points">
+  🪙 <span id="targetPoints">1000</span>
+ </div>
+
+ <div
+   class="gameArea"
+   id="targetArea">
+
+  <div
+    class="target"
+    id="target"
+    onclick="hitTarget()">
+    🎯
+  </div>
+
+ </div>
+
+ <div
+   class="result"
+   id="targetResult">
+   Press START
+ </div>
+
+ <button
+   id="targetStart"
+   onclick="startTarget()">
+   ▶️ START
+ </button>
+
+ <button
+   class="secondary"
+   onclick="backHome()">
+   ← BACK
+ </button>
+
+</div>
+
+
+<!-- COIN -->
+
+<div id="coinGame"
+     class="gameScreen card">
+
+ <h2>🪙 Coin Catch</h2>
+
+ <div class="points">
+  Score: <span id="coinScore">0</span>
+ </div>
+
+ <div
+   class="big"
+   id="coin">
+   🪙
+ </div>
+
+ <button onclick="catchCoin()">
+  🪙 CATCH
+ </button>
+
+ <button
+   class="secondary"
+   onclick="backHome()">
+   ← BACK
+ </button>
+
+</div>
+
+
+<!-- ROAD -->
+
+<div id="roadGame"
+     class="gameScreen card">
+
+ <h2>🚗 Road Runner</h2>
+
+ <div class="points">
+  Score: <span id="roadScore">0</span>
+ </div>
+
+ <div class="big">
+  🚗
+ </div>
+
+ <button onclick="roadMove(-1)">
+  ⬅️ LEFT
+ </button>
+
+ <button onclick="roadMove(1)">
+  RIGHT ➡️
+ </button>
+
+ <button
+   class="secondary"
+   onclick="backHome()">
+   ← BACK
+ </button>
+
+</div>
+
+
+<!-- BRICK -->
+
+<div id="brickGame"
+     class="gameScreen card">
+
+ <h2>🧱 Brick Breaker</h2>
+
+ <canvas
+   id="canvas"
+   width="420"
+   height="350">
+ </canvas>
+
+ <button onclick="startBrick()">
+  ▶️ START GAME
+ </button>
+
+ <button
+   class="secondary"
+   onclick="backHome()">
+   ← BACK
+ </button>
 
 </div>
 
@@ -189,145 +475,512 @@ button{
 <script type="module">
 
 import {
-  initializeApp
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+ initializeApp
+} from
+"https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
 import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+ getAuth,
+ createUserWithEmailAndPassword,
+ signInWithEmailAndPassword,
+ signOut,
+ onAuthStateChanged
+} from
+"https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBXEz7Z1bau3MRkwdEw97iyI54xsBGoO64",
-  authDomain: "live20game.firebaseapp.com",
-  projectId: "live20game",
-  storageBucket: "live20game.firebasestorage.app",
-  messagingSenderId: "611980685453",
-  appId: "1:611980685453:web:6a5b1ca8f8585cf98c72c4"
-};
+const firebaseConfig={
 
+ apiKey:
+ "AIzaSyBXEz7Z1bau3MRkwdEw97iyI54xsBGoO64",
 
-const app = initializeApp(firebaseConfig);
+ authDomain:
+ "live20game.firebaseapp.com",
 
-const auth = getAuth(app);
+ projectId:
+ "live20game",
 
+ storageBucket:
+ "live20game.firebasestorage.app",
 
-window.register = async function(){
+ messagingSenderId:
+ "611980685453",
 
-  const email =
-    document.getElementById("email").value.trim();
-
-  const password =
-    document.getElementById("password").value;
-
-  const message =
-    document.getElementById("message");
-
-
-  if(!email || !password){
-
-    message.textContent =
-      "Email এবং password দাও।";
-
-    return;
-  }
-
-
-  try{
-
-    await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-
-    message.textContent =
-      "✅ Registration successful!";
-
-  }catch(error){
-
-    message.textContent =
-      "❌ " + error.message;
-
-  }
+ appId:
+ "1:611980685453:web:6a5b1ca8f8585cf98c72c4"
 
 };
 
 
-window.login = async function(){
+const app=initializeApp(firebaseConfig);
 
-  const email =
-    document.getElementById("email").value.trim();
-
-  const password =
-    document.getElementById("password").value;
-
-  const message =
-    document.getElementById("message");
+const auth=getAuth(app);
 
 
-  if(!email || !password){
+window.registerUser=async function(){
 
-    message.textContent =
-      "Email এবং password দাও।";
+ const email=
+ document.getElementById("email").value.trim();
 
-    return;
-  }
+ const password=
+ document.getElementById("password").value;
 
+ const msg=
+ document.getElementById("authMessage");
 
-  try{
+ try{
 
-    await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+  await createUserWithEmailAndPassword(
+   auth,
+   email,
+   password
+  );
 
-  }catch(error){
+  msg.textContent=
+   "✅ Registration successful";
 
-    message.textContent =
-      "❌ Login failed";
+ }catch(e){
 
-  }
+  msg.textContent=
+   "❌ Registration failed";
+
+ }
 
 };
 
 
-window.logout = async function(){
+window.loginUser=async function(){
 
-  await signOut(auth);
+ const email=
+ document.getElementById("email").value.trim();
+
+ const password=
+ document.getElementById("password").value;
+
+ const msg=
+ document.getElementById("authMessage");
+
+ try{
+
+  await signInWithEmailAndPassword(
+   auth,
+   email,
+   password
+  );
+
+ }catch(e){
+
+  msg.textContent=
+   "❌ Login failed";
+
+ }
 
 };
 
 
-onAuthStateChanged(auth, user => {
+window.logoutUser=async function(){
 
-  const authBox =
-    document.getElementById("authBox");
+ await signOut(auth);
 
-  const home =
-    document.getElementById("home");
+};
 
-  if(user){
 
-    authBox.classList.add("hidden");
-    home.classList.remove("hidden");
+onAuthStateChanged(auth,user=>{
 
-    document.getElementById("userEmail")
-      .textContent = user.email;
+ const authBox=
+ document.getElementById("authBox");
 
-  }else{
+ const home=
+ document.getElementById("home");
 
-    authBox.classList.remove("hidden");
-    home.classList.add("hidden");
+ if(user){
 
-  }
+  authBox.classList.add("hidden");
+
+  home.classList.remove("hidden");
+
+  document.getElementById("userEmail")
+   .textContent=user.email;
+
+ }else{
+
+  authBox.classList.remove("hidden");
+
+  home.classList.add("hidden");
+
+ }
 
 });
+
+
+window.openGame=function(id){
+
+ document.querySelectorAll(".gameScreen")
+ .forEach(x=>
+  x.classList.remove("active")
+ );
+
+ document.getElementById(id)
+ .classList.add("active");
+
+ document.getElementById("home")
+ .classList.add("hidden");
+
+};
+
+
+window.backHome=function(){
+
+ document.querySelectorAll(".gameScreen")
+ .forEach(x=>
+  x.classList.remove("active")
+ );
+
+ document.getElementById("home")
+ .classList.remove("hidden");
+
+};
+
+
+/* CRICKET */
+
+let cricketScore=0;
+
+window.hitBall=function(){
+
+ const runs=
+ [1,2,4,6][
+  Math.floor(Math.random()*4)
+ ];
+
+ cricketScore+=runs;
+
+ document.getElementById(
+  "cricketScore"
+ ).textContent=cricketScore;
+
+ document.getElementById(
+  "cricketBall"
+ ).textContent="💥🏏";
+
+ setTimeout(()=>{
+
+  document.getElementById(
+   "cricketBall"
+  ).textContent="🏏";
+
+ },500);
+
+};
+
+
+/* TARGET */
+
+let targetPoints=1000;
+let targetRunning=false;
+let targetTimer=null;
+
+window.startTarget=function(){
+
+ if(targetRunning)return;
+
+ targetRunning=true;
+
+ document.getElementById(
+  "targetResult"
+ ).textContent=
+ "🎯 Find and tap the target!";
+
+ document.getElementById(
+  "targetStart"
+ ).disabled=true;
+
+ moveTarget();
+
+ targetTimer=setTimeout(()=>{
+
+  if(!targetRunning)return;
+
+  targetRunning=false;
+
+  document.getElementById(
+   "targetResult"
+  ).textContent=
+  "❌ Miss — +0 points";
+
+  document.getElementById(
+   "targetStart"
+  ).disabled=false;
+
+ },5000);
+
+};
+
+
+function moveTarget(){
+
+ const area=
+ document.getElementById("targetArea");
+
+ const target=
+ document.getElementById("target");
+
+ const maxX=
+ area.clientWidth-target.offsetWidth;
+
+ const maxY=
+ area.clientHeight-target.offsetHeight;
+
+ target.style.left=
+ Math.floor(Math.random()*Math.max(1,maxX))
+ +"px";
+
+ target.style.top=
+ Math.floor(Math.random()*Math.max(1,maxY))
+ +"px";
+
+}
+
+
+window.hitTarget=function(){
+
+ if(!targetRunning)return;
+
+ targetRunning=false;
+
+ clearTimeout(targetTimer);
+
+ targetPoints+=100;
+
+ document.getElementById(
+  "targetPoints"
+ ).textContent=
+ targetPoints.toLocaleString();
+
+ document.getElementById(
+  "mainPoints"
+ ).textContent=
+ targetPoints.toLocaleString();
+
+ document.getElementById(
+  "targetResult"
+ ).textContent=
+ "🎉 HIT! +100 Virtual Points";
+
+ document.getElementById(
+  "targetStart"
+ ).disabled=false;
+
+};
+
+
+/* COIN */
+
+let coinScore=0;
+
+window.catchCoin=function(){
+
+ coinScore+=10;
+
+ document.getElementById(
+  "coinScore"
+ ).textContent=coinScore;
+
+ document.getElementById(
+  "coin"
+ ).textContent="✨🪙✨";
+
+ setTimeout(()=>{
+
+  document.getElementById(
+   "coin"
+  ).textContent="🪙";
+
+ },500);
+
+};
+
+
+/* ROAD */
+
+let roadScore=0;
+
+window.roadMove=function(direction){
+
+ roadScore+=10;
+
+ document.getElementById(
+  "roadScore"
+ ).textContent=roadScore;
+
+};
+
+
+/* BRICK BREAKER */
+
+const canvas=
+ document.getElementById("canvas");
+
+const ctx=
+ canvas.getContext("2d");
+
+let bx=210;
+let by=320;
+let bdx=3;
+let bdy=-3;
+let paddle=165;
+let bricks=[];
+
+
+function createBricks(){
+
+ bricks=[];
+
+ for(let r=0;r<4;r++){
+
+  for(let c=0;c<7;c++){
+
+   bricks.push({
+
+    x:c*58+8,
+    y:r*25+15,
+    alive:true
+
+   });
+
+  }
+
+ }
+
+}
+
+
+window.startBrick=function(){
+
+ createBricks();
+
+ bx=210;
+ by=320;
+ bdx=3;
+ bdy=-3;
+
+ requestAnimationFrame(drawBrick);
+
+};
+
+
+function drawBrick(){
+
+ ctx.clearRect(
+  0,0,
+  canvas.width,
+  canvas.height
+ );
+
+ bricks.forEach(b=>{
+
+  if(b.alive){
+
+   ctx.fillRect(
+    b.x,
+    b.y,
+    50,
+    18
+   );
+
+  }
+
+ });
+
+
+ ctx.beginPath();
+
+ ctx.arc(
+  bx,by,
+  7,
+  0,
+  Math.PI*2
+ );
+
+ ctx.fill();
+
+
+ ctx.fillRect(
+  paddle,
+  335,
+  90,
+  10
+ );
+
+
+ bx+=bdx;
+ by+=bdy;
+
+
+ if(
+  bx<7 ||
+  bx>413
+ )
+ bdx=-bdx;
+
+
+ if(by<7)
+ bdy=-bdy;
+
+
+ if(
+  by>325 &&
+  bx>paddle &&
+  bx<paddle+90
+ )
+ bdy=-bdy;
+
+
+ if(by>350){
+
+  bx=210;
+  by=320;
+
+ }
+
+
+ bricks.forEach(b=>{
+
+  if(
+   b.alive &&
+   bx>b.x &&
+   bx<b.x+50 &&
+   by>b.y &&
+   by<b.y+18
+  ){
+
+   b.alive=false;
+   bdy=-bdy;
+
+  }
+
+ });
+
+
+ requestAnimationFrame(drawBrick);
+
+}
+
+
+canvas.addEventListener(
+ "touchmove",
+ e=>{
+
+  const rect=
+   canvas.getBoundingClientRect();
+
+  paddle=
+   e.touches[0].clientX-
+   rect.left-
+   45;
+
+ }
+);
 
 </script>
 
