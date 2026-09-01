@@ -64,7 +64,6 @@
       border: 1px solid #426554;
       background: #07130f;
       color: white;
-      outline: none;
     }
 
     button {
@@ -129,7 +128,6 @@
 
 <div class="container">
 
-  <!-- LOGIN / REGISTER -->
   <section class="card" id="authBox">
     <h2>👤 Account</h2>
 
@@ -142,28 +140,22 @@
     <div class="message" id="message"></div>
   </section>
 
-  <!-- USER AREA -->
   <section class="card hidden" id="userBox">
     <h3>Welcome 👋</h3>
     <div class="user" id="userEmail"></div>
-
     <button class="secondary" onclick="logoutUser()">LOGOUT</button>
   </section>
 
-  <!-- POINTS -->
   <section class="card points hidden" id="gameBox">
     <h3>🪙 Virtual Points</h3>
     <div class="points-number" id="points">1,000</div>
 
-    <br>
-
     <button onclick="playGame()">PLAY GAME</button>
   </section>
 
-  <!-- LEADERBOARD -->
   <section class="card hidden" id="leaderboardBox">
     <h3>🏆 Leaderboard</h3>
-    <p>Leaderboard system will be connected to the online database in the next step.</p>
+    <p>Leaderboard will be added next.</p>
   </section>
 
 </div>
@@ -185,6 +177,13 @@
     signOut
   } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc
+  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
   const firebaseConfig = {
     apiKey: "AIzaSyBXEz7Z1bau3MRkwdEw97iyI54xsBGoO64",
     authDomain: "live20game.firebaseapp.com",
@@ -196,11 +195,12 @@
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
+  const db = getFirestore(app);
 
   let points = 1000;
 
-  const email = document.getElementById("email");
-  const password = document.getElementById("password");
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
   const message = document.getElementById("message");
 
   function showMessage(text) {
@@ -209,13 +209,21 @@
 
   window.registerUser = async function () {
     try {
-      await createUserWithEmailAndPassword(
+      const result = await createUserWithEmailAndPassword(
         auth,
-        email.value,
-        password.value
+        emailInput.value,
+        passwordInput.value
       );
 
-      showMessage("Account created successfully!");
+      await setDoc(
+        doc(db, "users", result.user.uid),
+        {
+          email: result.user.email,
+          points: 1000
+        }
+      );
+
+      showMessage("Account created!");
     } catch (error) {
       showMessage(error.message);
     }
@@ -225,8 +233,8 @@
     try {
       await signInWithEmailAndPassword(
         auth,
-        email.value,
-        password.value
+        emailInput.value,
+        passwordInput.value
       );
 
       showMessage("Login successful!");
@@ -239,8 +247,26 @@
     await signOut(auth);
   };
 
-  window.playGame = function () {
+  async function loadPoints(user) {
+    const userRef = doc(db, "users", user.uid);
+    const snapshot = await getDoc(userRef);
 
+    if (snapshot.exists()) {
+      points = snapshot.data().points ?? 1000;
+    } else {
+      points = 1000;
+
+      await setDoc(userRef, {
+        email: user.email,
+        points: 1000
+      });
+    }
+
+    document.getElementById("points").textContent =
+      points.toLocaleString();
+  }
+
+  window.playGame = function () {
     const win = Math.random() > 0.5;
 
     if (win) {
@@ -255,7 +281,7 @@
       points.toLocaleString();
   };
 
-  onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(auth, async (user) => {
 
     const authBox = document.getElementById("authBox");
     const userBox = document.getElementById("userBox");
@@ -272,6 +298,8 @@
 
       document.getElementById("userEmail").textContent =
         user.email;
+
+      await loadPoints(user);
 
     } else {
 
