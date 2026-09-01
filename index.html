@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LIVE20 Game</title>
+  <title>LIVE20 - 3D Spinner</title>
 
   <style>
     * {
@@ -12,15 +12,16 @@
 
     body {
       margin: 0;
+      min-height: 100vh;
       font-family: Arial, sans-serif;
       background: #07130f;
       color: white;
+      text-align: center;
     }
 
     header {
-      background: #0d241b;
       padding: 20px;
-      text-align: center;
+      background: #0d241b;
       border-bottom: 1px solid #28533f;
     }
 
@@ -30,71 +31,142 @@
       font-weight: bold;
     }
 
+    .subtitle {
+      color: #aab8b2;
+      margin-top: 5px;
+      font-size: 13px;
+    }
+
     .container {
       width: 92%;
-      max-width: 480px;
+      max-width: 500px;
       margin: 20px auto;
     }
 
     .card {
       background: #0d241b;
       border: 1px solid #28533f;
-      border-radius: 16px;
+      border-radius: 18px;
       padding: 20px;
       margin-bottom: 18px;
-      text-align: center;
     }
 
     .points {
       color: #ffb300;
-      font-size: 30px;
+      font-size: 32px;
       font-weight: bold;
+      margin-top: 8px;
     }
 
-    .wheel {
-      width: 230px;
-      height: 230px;
-      border-radius: 50%;
-      margin: 20px auto;
-      border: 8px solid #ffb300;
-
-      background: conic-gradient(
-        #e74c3c 0deg 60deg,
-        #3498db 60deg 120deg,
-        #2ecc71 120deg 180deg,
-        #9b59b6 180deg 240deg,
-        #f1c40f 240deg 300deg,
-        #e67e22 300deg 360deg
-      );
-
-      transition: transform 3s ease-out;
+    .wheel-area {
+      perspective: 900px;
+      padding: 20px 0 5px;
     }
 
     .pointer {
-      font-size: 30px;
+      position: relative;
+      z-index: 10;
+      font-size: 34px;
       color: #ffb300;
+      margin-bottom: -12px;
+      text-shadow: 0 3px 8px #000;
+    }
+
+    .wheel {
+      width: 250px;
+      height: 250px;
+      margin: auto;
+      border-radius: 50%;
+      border: 10px solid #d99a00;
+
+      background: conic-gradient(
+        #e74c3c 0deg 45deg,
+        #3498db 45deg 90deg,
+        #2ecc71 90deg 135deg,
+        #9b59b6 135deg 180deg,
+        #f1c40f 180deg 225deg,
+        #e67e22 225deg 270deg,
+        #1abc9c 270deg 315deg,
+        #e84393 315deg 360deg
+      );
+
+      box-shadow:
+        0 18px 0 #5d4300,
+        0 25px 35px rgba(0, 0, 0, 0.55),
+        inset 0 0 25px rgba(255, 255, 255, 0.35);
+
+      transform-style: preserve-3d;
+      transition: transform 4s cubic-bezier(0.12, 0.75, 0.18, 1);
+    }
+
+    .wheel::after {
+      content: "";
+      display: block;
+      width: 65px;
+      height: 65px;
+      position: relative;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+
+      border-radius: 50%;
+      background: radial-gradient(
+        circle at 35% 30%,
+        #fff6c7,
+        #ffb300 45%,
+        #a66d00 100%
+      );
+
+      border: 5px solid #ffe08a;
+      box-shadow:
+        0 5px 10px rgba(0,0,0,.45),
+        inset 0 3px 8px rgba(255,255,255,.6);
+    }
+
+    .wheel.spin3d {
+      transform:
+        rotateX(12deg)
+        rotateZ(var(--rotation));
     }
 
     button {
       width: 100%;
-      padding: 14px;
+      padding: 15px;
+      margin-top: 20px;
       border: none;
-      border-radius: 10px;
-      background: #ffb300;
+      border-radius: 11px;
+      background: linear-gradient(
+        #ffd15c,
+        #ffb300
+      );
       color: #111;
       font-size: 17px;
       font-weight: bold;
+      box-shadow: 0 5px 0 #9a6900;
+    }
+
+    button:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #9a6900;
     }
 
     button:disabled {
-      opacity: 0.5;
+      opacity: 0.55;
+      transform: none;
     }
 
     #result {
-      margin-top: 15px;
-      min-height: 25px;
-      color: #ffcc66;
+      min-height: 28px;
+      margin-top: 18px;
+      color: #ffcf5c;
       font-size: 18px;
+      font-weight: bold;
+    }
+
+    .note {
+      color: #8fa39a;
+      font-size: 12px;
+      margin-top: 12px;
     }
   </style>
 </head>
@@ -103,30 +175,42 @@
 
 <header>
   <div class="logo">LIVE20</div>
-  <p>Free Virtual Points Game</p>
+  <div class="subtitle">Free Virtual Points Game</div>
 </header>
 
 <div class="container">
 
   <div class="card">
-    <h3>Your Virtual Points</h3>
+    <div>🪙 Your Virtual Points</div>
     <div class="points" id="points">1,000</div>
   </div>
 
   <div class="card">
 
-    <h2>🎡 Free Lucky Spinner</h2>
-    <p>Spin for free and receive a virtual bonus!</p>
+    <h2>🎡 3D Lucky Spinner</h2>
+    <p>Spin for free and receive a virtual bonus.</p>
 
-    <div class="pointer">▼</div>
+    <div class="wheel-area">
 
-    <div class="wheel" id="wheel"></div>
+      <div class="pointer">▼</div>
+
+      <div
+        class="wheel"
+        id="wheel"
+        style="--rotation: 0deg;">
+      </div>
+
+    </div>
 
     <button id="spinBtn" onclick="spinWheel()">
-      SPIN FREE
+      🎡 SPIN FREE
     </button>
 
     <div id="result"></div>
+
+    <div class="note">
+      Free game • No real money • No betting
+    </div>
 
   </div>
 
@@ -136,6 +220,7 @@
 
   let points = 1000;
   let rotation = 0;
+  let spinning = false;
 
   const bonuses = [
     10,
@@ -143,10 +228,16 @@
     50,
     100,
     25,
-    75
+    75,
+    30,
+    150
   ];
 
   function spinWheel() {
+
+    if (spinning) return;
+
+    spinning = true;
 
     const button =
       document.getElementById("spinBtn");
@@ -159,23 +250,30 @@
 
     button.disabled = true;
 
-    result.textContent = "Spinning...";
+    result.textContent = "🎡 Spinning...";
 
-    const extraRotation =
-      1440 + Math.floor(Math.random() * 1440);
+    const extra =
+      1440 +
+      Math.floor(Math.random() * 1440);
 
-    rotation += extraRotation;
+    rotation += extra;
 
-    wheel.style.transform =
-      `rotate(${rotation}deg)`;
+    wheel.style.setProperty(
+      "--rotation",
+      rotation + "deg"
+    );
+
+    wheel.classList.add("spin3d");
 
     setTimeout(() => {
 
-      const bonusIndex =
-        Math.floor(Math.random() * bonuses.length);
+      const index =
+        Math.floor(
+          Math.random() * bonuses.length
+        );
 
       const bonus =
-        bonuses[bonusIndex];
+        bonuses[index];
 
       points += bonus;
 
@@ -184,11 +282,15 @@
         points.toLocaleString();
 
       result.textContent =
-        `🎉 You received +${bonus} virtual points!`;
+        "🎉 +" +
+        bonus +
+        " Virtual Points!";
 
       button.disabled = false;
 
-    }, 3000);
+      spinning = false;
+
+    }, 4000);
   }
 
 </script>
