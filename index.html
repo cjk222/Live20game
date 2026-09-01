@@ -1,297 +1,333 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LIVE20 - 3D Spinner</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>LIVE20</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
-      background: #07130f;
-      color: white;
-      text-align: center;
-    }
-
-    header {
-      padding: 20px;
-      background: #0d241b;
-      border-bottom: 1px solid #28533f;
-    }
-
-    .logo {
-      color: #ffb300;
-      font-size: 32px;
-      font-weight: bold;
-    }
-
-    .subtitle {
-      color: #aab8b2;
-      margin-top: 5px;
-      font-size: 13px;
-    }
-
-    .container {
-      width: 92%;
-      max-width: 500px;
-      margin: 20px auto;
-    }
-
-    .card {
-      background: #0d241b;
-      border: 1px solid #28533f;
-      border-radius: 18px;
-      padding: 20px;
-      margin-bottom: 18px;
-    }
-
-    .points {
-      color: #ffb300;
-      font-size: 32px;
-      font-weight: bold;
-      margin-top: 8px;
-    }
-
-    .wheel-area {
-      perspective: 900px;
-      padding: 20px 0 5px;
-    }
-
-    .pointer {
-      position: relative;
-      z-index: 10;
-      font-size: 34px;
-      color: #ffb300;
-      margin-bottom: -12px;
-      text-shadow: 0 3px 8px #000;
-    }
-
-    .wheel {
-      width: 250px;
-      height: 250px;
-      margin: auto;
-      border-radius: 50%;
-      border: 10px solid #d99a00;
-
-      background: conic-gradient(
-        #e74c3c 0deg 45deg,
-        #3498db 45deg 90deg,
-        #2ecc71 90deg 135deg,
-        #9b59b6 135deg 180deg,
-        #f1c40f 180deg 225deg,
-        #e67e22 225deg 270deg,
-        #1abc9c 270deg 315deg,
-        #e84393 315deg 360deg
-      );
-
-      box-shadow:
-        0 18px 0 #5d4300,
-        0 25px 35px rgba(0, 0, 0, 0.55),
-        inset 0 0 25px rgba(255, 255, 255, 0.35);
-
-      transform-style: preserve-3d;
-      transition: transform 4s cubic-bezier(0.12, 0.75, 0.18, 1);
-    }
-
-    .wheel::after {
-      content: "";
-      display: block;
-      width: 65px;
-      height: 65px;
-      position: relative;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-
-      border-radius: 50%;
-      background: radial-gradient(
-        circle at 35% 30%,
-        #fff6c7,
-        #ffb300 45%,
-        #a66d00 100%
-      );
-
-      border: 5px solid #ffe08a;
-      box-shadow:
-        0 5px 10px rgba(0,0,0,.45),
-        inset 0 3px 8px rgba(255,255,255,.6);
-    }
-
-    .wheel.spin3d {
-      transform:
-        rotateX(12deg)
-        rotateZ(var(--rotation));
-    }
-
-    button {
-      width: 100%;
-      padding: 15px;
-      margin-top: 20px;
-      border: none;
-      border-radius: 11px;
-      background: linear-gradient(
-        #ffd15c,
-        #ffb300
-      );
-      color: #111;
-      font-size: 17px;
-      font-weight: bold;
-      box-shadow: 0 5px 0 #9a6900;
-    }
-
-    button:active {
-      transform: translateY(3px);
-      box-shadow: 0 2px 0 #9a6900;
-    }
-
-    button:disabled {
-      opacity: 0.55;
-      transform: none;
-    }
-
-    #result {
-      min-height: 28px;
-      margin-top: 18px;
-      color: #ffcf5c;
-      font-size: 18px;
-      font-weight: bold;
-    }
-
-    .note {
-      color: #8fa39a;
-      font-size: 12px;
-      margin-top: 12px;
-    }
-  </style>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#07130f;
+  color:white;
+}
+header{
+  padding:20px;
+  text-align:center;
+  background:#0d241b;
+  border-bottom:1px solid #28533f;
+}
+.logo{
+  color:#ffb300;
+  font-size:32px;
+  font-weight:bold;
+}
+.container{
+  width:92%;
+  max-width:500px;
+  margin:20px auto;
+}
+.card{
+  background:#0d241b;
+  border:1px solid #28533f;
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:16px;
+}
+input{
+  width:100%;
+  padding:13px;
+  margin:7px 0;
+  border:1px solid #355d4c;
+  border-radius:9px;
+  background:#07130f;
+  color:white;
+}
+button{
+  width:100%;
+  padding:14px;
+  margin-top:9px;
+  border:0;
+  border-radius:10px;
+  background:#ffb300;
+  color:#111;
+  font-size:16px;
+  font-weight:bold;
+}
+.secondary{
+  background:#19382b;
+  color:white;
+}
+.hidden{display:none}
+.game{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  cursor:pointer;
+}
+.icon{font-size:40px}
+.game h3{margin:0 0 5px}
+.game p{
+  margin:0;
+  color:#9fb0a8;
+  font-size:13px;
+}
+.points{
+  color:#ffb300;
+  font-size:30px;
+  font-weight:bold;
+  text-align:center;
+}
+#message{
+  min-height:22px;
+  color:#ffcc66;
+  text-align:center;
+  margin:8px;
+}
+</style>
 </head>
 
 <body>
 
 <header>
   <div class="logo">LIVE20</div>
-  <div class="subtitle">Free Virtual Points Game</div>
+  <div>🎮 Free Arcade Games</div>
 </header>
 
 <div class="container">
 
+<!-- LOGIN -->
+<div id="authBox" class="card">
+  <h2 id="authTitle">Login</h2>
+
+  <input id="email"
+         type="email"
+         placeholder="Email">
+
+  <input id="password"
+         type="password"
+         placeholder="Password">
+
+  <button onclick="login()">LOGIN</button>
+  <button class="secondary"
+          onclick="register()">REGISTER</button>
+
+  <div id="message"></div>
+</div>
+
+
+<!-- HOME -->
+<div id="home" class="hidden">
+
   <div class="card">
-    <div>🪙 Your Virtual Points</div>
-    <div class="points" id="points">1,000</div>
+    <div>👤 <span id="userEmail"></span></div>
+    <div class="points">🪙 1,000</div>
+    <button class="secondary"
+            onclick="logout()">LOGOUT</button>
   </div>
 
-  <div class="card">
 
-    <h2>🎡 3D Lucky Spinner</h2>
-    <p>Spin for free and receive a virtual bonus.</p>
+  <h2>🎮 Choose a Game</h2>
 
-    <div class="wheel-area">
 
-      <div class="pointer">▼</div>
-
-      <div
-        class="wheel"
-        id="wheel"
-        style="--rotation: 0deg;">
-      </div>
-
+  <div class="card game"
+       onclick="alert('🏏 Cricket Hit চালু হবে')">
+    <div class="icon">🏏</div>
+    <div>
+      <h3>Cricket Hit</h3>
+      <p>Tap and score runs.</p>
     </div>
+  </div>
 
-    <button id="spinBtn" onclick="spinWheel()">
-      🎡 SPIN FREE
-    </button>
 
-    <div id="result"></div>
-
-    <div class="note">
-      Free game • No real money • No betting
+  <div class="card game"
+       onclick="alert('🎯 Target Hit চালু হবে')">
+    <div class="icon">🎯</div>
+    <div>
+      <h3>Target Hit</h3>
+      <p>Hit the moving target.</p>
     </div>
+  </div>
 
+
+  <div class="card game"
+       onclick="alert('🪙 Coin Catch চালু হবে')">
+    <div class="icon">🪙</div>
+    <div>
+      <h3>Coin Catch</h3>
+      <p>Catch the falling coins.</p>
+    </div>
+  </div>
+
+
+  <div class="card game"
+       onclick="alert('🚗 Road Runner চালু হবে')">
+    <div class="icon">🚗</div>
+    <div>
+      <h3>Road Runner</h3>
+      <p>Avoid obstacles.</p>
+    </div>
+  </div>
+
+
+  <div class="card game"
+       onclick="alert('🧱 Brick Breaker চালু হবে')">
+    <div class="icon">🧱</div>
+    <div>
+      <h3>Brick Breaker</h3>
+      <p>Break the blocks.</p>
+    </div>
   </div>
 
 </div>
 
-<script>
+</div>
 
-  let points = 1000;
-  let rotation = 0;
-  let spinning = false;
 
-  const bonuses = [
-    10,
-    20,
-    50,
-    100,
-    25,
-    75,
-    30,
-    150
-  ];
+<script type="module">
 
-  function spinWheel() {
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
-    if (spinning) return;
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
-    spinning = true;
 
-    const button =
-      document.getElementById("spinBtn");
+const firebaseConfig = {
+  apiKey: "AIzaSyBXEz7Z1bau3MRkwdEw97iyI54xsBGoO64",
+  authDomain: "live20game.firebaseapp.com",
+  projectId: "live20game",
+  storageBucket: "live20game.firebasestorage.app",
+  messagingSenderId: "611980685453",
+  appId: "1:611980685453:web:6a5b1ca8f8585cf98c72c4"
+};
 
-    const wheel =
-      document.getElementById("wheel");
 
-    const result =
-      document.getElementById("result");
+const app = initializeApp(firebaseConfig);
 
-    button.disabled = true;
+const auth = getAuth(app);
 
-    result.textContent = "🎡 Spinning...";
 
-    const extra =
-      1440 +
-      Math.floor(Math.random() * 1440);
+window.register = async function(){
 
-    rotation += extra;
+  const email =
+    document.getElementById("email").value.trim();
 
-    wheel.style.setProperty(
-      "--rotation",
-      rotation + "deg"
+  const password =
+    document.getElementById("password").value;
+
+  const message =
+    document.getElementById("message");
+
+
+  if(!email || !password){
+
+    message.textContent =
+      "Email এবং password দাও।";
+
+    return;
+  }
+
+
+  try{
+
+    await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
     );
 
-    wheel.classList.add("spin3d");
+    message.textContent =
+      "✅ Registration successful!";
 
-    setTimeout(() => {
+  }catch(error){
 
-      const index =
-        Math.floor(
-          Math.random() * bonuses.length
-        );
+    message.textContent =
+      "❌ " + error.message;
 
-      const bonus =
-        bonuses[index];
-
-      points += bonus;
-
-      document.getElementById("points")
-        .textContent =
-        points.toLocaleString();
-
-      result.textContent =
-        "🎉 +" +
-        bonus +
-        " Virtual Points!";
-
-      button.disabled = false;
-
-      spinning = false;
-
-    }, 4000);
   }
+
+};
+
+
+window.login = async function(){
+
+  const email =
+    document.getElementById("email").value.trim();
+
+  const password =
+    document.getElementById("password").value;
+
+  const message =
+    document.getElementById("message");
+
+
+  if(!email || !password){
+
+    message.textContent =
+      "Email এবং password দাও।";
+
+    return;
+  }
+
+
+  try{
+
+    await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+  }catch(error){
+
+    message.textContent =
+      "❌ Login failed";
+
+  }
+
+};
+
+
+window.logout = async function(){
+
+  await signOut(auth);
+
+};
+
+
+onAuthStateChanged(auth, user => {
+
+  const authBox =
+    document.getElementById("authBox");
+
+  const home =
+    document.getElementById("home");
+
+  if(user){
+
+    authBox.classList.add("hidden");
+    home.classList.remove("hidden");
+
+    document.getElementById("userEmail")
+      .textContent = user.email;
+
+  }else{
+
+    authBox.classList.remove("hidden");
+    home.classList.add("hidden");
+
+  }
+
+});
 
 </script>
 
